@@ -1,0 +1,98 @@
+Se tiene una lista ya cargada con información de alumnos que se anotaron a un final (legajo, nombre y ap, fecha nacimiento, nota).
+En base a esta lista, crear una nueva con todos aquellos alumnos que hayan aprobado. La carga en esta lista debe ser de menor a mayor edad.
+Existe una función ya cargada en el sistema llamada edad (), la cual recibe como parámetro dos fechas (actual y de nacimiento) y devuelve la edad.
+Eliminar de la lista de entrada aquellos alumnos que no rindieron (nota = 0).
+
+
+Accion alumnosutn (prim: puntero a nodo) es 
+	ambiente
+
+	nodo = registro
+		legajo: entero
+		nya: alfanumerico
+		fecha_nac = registro
+			aaaa : entero
+			mm : entero
+			dd : entero
+		fin registro
+		nota: entero
+		prox : puntero a nodo
+	fin registro
+	p,aux,ant : puntero a nodo
+
+	nodosal = registro
+		legajo: entero
+		nya: alfanumerico
+		edad: entero
+		prox: puntero a nodo
+	fin registro
+	prim2,p2,q2,ant2 : puntero a nodosal
+
+
+	procedimiento carga_lista2 () es 
+		nuevo (q2)
+		*q2.legajo := *p.legajo
+		*q2.nya := *p.nya
+		*q2.edad := edad (fecha_actual (), *p.fecha_nac)
+		// ya cree el nodo ahora lo debo cargar de manera ordenada
+		si prim2 = nill entonces 
+			// lista vacia
+			prim2 := q2
+			*q2.prox := nill
+		sino
+			// tengo que ver donde lo acomodo al nuevo nodo
+			p2 := prim2
+			mientras p2 <> nill y *p2.edad < *q2.edad hacer 
+				ant2 := p2
+				p2 := *p2.prox
+			fin mientras
+
+			// 3 caminos
+			si p2 = prim2 entonces 
+				// al inicio
+				*q2.prox := prim2
+				prim2 := q2
+			sino
+				si p2 = nill entonces 
+					// al final
+					*ant2.prox := q2
+					*q2.prox := nill
+				sino
+					// en el medio de dos nodos
+					*ant2.prox := q2
+					*q2.prox := p2
+				fin si
+			fin si
+		fin si
+	fin procedimiento
+
+	proceso
+		si prim = nill entonces 
+			esc ("error lista de entrada vacia no puedo hacer nada")
+		sino
+			prim2 := nill // lista de salida inicializada
+			p := prim
+			mientras p<> nill hacer 
+				si *p.nota >= 6 entonces 
+					carga_lista2()
+				fin si
+				si *p.nota = 0 entonces  // debo eliminarlo
+					aux := p // auxiliar para eliminar el nodo
+					p := *p.prox // dejo p en el nodo siguiente
+
+					si aux = prim entonces 
+						prim := *aux.prox
+					sino
+						*ant.prox := *aux.prox
+					fin si
+					disponer (aux)
+				sino
+					ant := p
+					p := *p.prox
+				fin si
+			fin mientras
+		fin si
+	fin proceos
+fin accion
+
+

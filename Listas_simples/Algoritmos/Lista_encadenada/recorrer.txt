@@ -1,0 +1,32 @@
+Accion listasimple_recorrido (prim : puntero a nodo) es  // supuestamente la lista viene cargada, nos viene la direccion del primer nodo
+	ambiente
+
+	nodo = registro
+		// datos
+		nya : alfanumerico
+		edad: entero
+		// punteros internos
+		prox: puntero a nodo
+	fin registro
+	// punteros externos
+	p, q, ant, aux: puntero a nodo
+
+	proceso
+		// recorrido
+
+		si prim = nill entonces 
+			esc ("error lista de entrada vacia, no puedo recorrer")
+		sino
+			p := prim // me paro con mi puntero p en mi primer nodo
+			
+
+			// desde el primero al ultimo
+			mientras p <> nill hacer 
+				esc ("Nombre de la persona:", *p.nya)
+				// * diferenciar un puntero de un registro
+
+				p := *p.prox // esto es como el leer (), avz (), me permite moverme de nodo en nodo
+			fin mientras
+		fin si
+	fin proceso
+fin accion

@@ -1,0 +1,98 @@
+				
+Dada una lista simplemente encadenada que contiene datos de todas las provincias de la República Argentina: nombre, capital, cantidad total de habitantes y cantidad de analfabetos, y está ordenada en forma decreciente por número de habitantes analfabetos, generar otras tres listas que contengan el nombre, la capital y el porcentaje de analfabetos de las Provincias que respondan a las siguientes restricciones.
+
+    L1: <= 10 % analfabetos
+    L2: 11 a 25 % analfabetos
+    L3: => 26 % analfabetos
+
+Accion analfabetos (prim : puntero a nodo) es 
+	ambiente
+
+	nodo = registro
+		nombreprov
+		capprov
+		hab
+		analfabetos 
+		prox:puntero a nodo
+	fin registro
+	p,aux,ant : puntero a nodo
+
+	nodosal = registro
+		nombreprov
+		capprov
+		porcent_af
+		prox: puntero a nodosal
+	fin registro
+	prim1,prim2,prim3: puntero a nodosal
+	qsal : puntero a nodosal
+
+	procedimiento carga_l1 () es 
+		nuevo (qsal)
+		*qsal.nombrepov := *p.nombreprov
+		*qsal.capprov := *p.capprov
+		*qsal.porcent_af := porcent
+
+		si prim1 = nill entonces 
+			prim1 := qsal
+			*qsal.prox := nill
+		sino
+			*qsal.prox := prim1
+			prim1 := qsal
+		fin si
+	fin procedimiento
+
+	procedimiento carga_l2 () es 
+		nuevo (qsal)
+		*qsal.nombrepov := *p.nombreprov
+		*qsal.capprov := *p.capprov
+		*qsal.porcent_af := porcent
+
+		si prim2 = nill entonces 
+			prim2 := qsal
+			*qsal.prox := nill
+		sino
+			*qsal.prox := prim2
+			prim2 := qsal
+		fin si
+	fin procedimiento
+
+	procedimiento carga_l3 () es 
+		nuevo (qsal)
+		*qsal.nombrepov := *p.nombreprov
+		*qsal.capprov := *p.capprov
+		*qsal.porcent_af := porcent
+
+		si prim3 = nill entonces 
+			prim3 := qsal
+			*qsal.prox := nill
+		sino
+			*qsal.prox := prim3
+			prim3 := qsal
+		fin si
+	fin procedimiento
+
+	proceso 
+		si prim = nill entonces 
+			esc ("error lista de entrada vacia, no hay provincias")
+		sino
+			// inicio listas de salida
+			prim1 := nill
+			prim2 := nill
+			prim3 := nill
+
+			p := prim
+			mientras p <> nill hacer 
+				// recorre nodo x nodo, calcula el porcentaje de analfabetos y en base a ese % lo carga en determinada lista
+				porcent := (*p.analfabetos * 100) / *p.hab
+
+				segun porcent hacer 
+					<= 10 : carga_l1 ()
+					<= 25 : carga_l2 ()
+					>= 26 : carga_l3 ()
+				fin segun
+
+				p := *p.prox
+			fin mientras
+		fin si
+	fin proceso
+fin accion

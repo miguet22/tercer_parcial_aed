@@ -1,0 +1,57 @@
+Se dispone de una lista simplemente encadenada de números enteros, diseñar un algoritmo que a partir de ella genere otra lista conteniendo los nodos cuyos datos terminan en cero; dichos elementos, deberán ser eliminados de la lista original. Se asume que la lista está cargada, y que el algoritmo recibe como parámetro de entrada la dirección del primer elemento.
+
+Accion ej4.2 (prim:puntero a nodo) es // la lista supuestamente viene cargada, se recibe la direccion del primer elemento
+	ambiente
+
+	nodo  = registro
+		num : entero
+		prox : puntero a nodo
+	fin registro
+	p,aux,ant : puntero a nodo // punteros para movernos en la lista de entrada
+	primsal, qsal : puntero a nodo // punteros para la salida
+
+	proceso
+		si prim = nill entonces 
+			esc ("error: lista de entrada vacia")
+		sino
+			primsal := nill // inicializo mi lista de salida -- abrir /s -- crear (secsal)
+
+			// opcion1 : buscar un elemento que termine en 0 y cargarlo y luego eliminarlo
+			// opcion2: a medida que recorro veo que elementos terminan en 0 y los cargo y elimino
+
+			// busco, encuentro y elimino -- un unico elemento -- busqueda lineal con centinela
+			// a medida que recorro elimino -- busqueda lineal
+
+			p := prim
+			mientras p <> nill hacer 
+				si (*p.num mod 10 = 0) entonces 
+					// eliminan el nodo
+
+					nuevo (qsal)
+					*qsal.num := *p.num
+					si primsal = nill entonces 
+						// lista de salida vacia
+						primsal := qsal
+						*qsal.prox := nill
+					sino
+						*qsal.prox := primsal
+						primsal := qsal
+					fin s
+
+					aux := p
+					p:= *p.prox
+					si aux = prim entonces 
+						prim := *aux.prox
+					sino
+						*ant.prox := *aux.prox
+					fin si
+					disponer (aux) -- eliminar el nodo al que esta siendo apuntado 
+				sino
+					ant := p
+					p := *p.prox
+				fin si
+			fin mientras
+			// termine el ejercicio
+		fin si
+	fin proceso
+fin accion

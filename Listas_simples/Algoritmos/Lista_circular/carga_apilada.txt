@@ -1,0 +1,35 @@
+Accion listacircular_carga_apilada () es
+	ambiente
+		nodo = registro
+			num : entero
+			prox: puntero a nodo
+		fin registro
+
+		prim2, q2, ultimo : puntero a nodo
+		rta : alfanumerico
+
+	proceso
+		prim2 := nill
+		esc ("desea cargar numeros")
+		leer (rta)
+		mientras rta = "si" hacer 
+			nuevo (q2)
+			esc ("INGRESE numero")
+			leer (*q2.num)
+			// de aca
+			si prim2 = nill entonces 
+				// lista vacia
+				prim2 := q2
+				*q2.prox := q2 // q2 apunta a si mismo
+				ultimo := q2
+			sino
+				ultimo := q2
+				*q2.prox := prim2
+				prim2 := q2
+			fin si 
+			// hasta aca, lo demás es adorno
+			esc ("desea cargar numeros")
+			leer (rta)
+		fin mientras
+	fin proceso
+fin accion

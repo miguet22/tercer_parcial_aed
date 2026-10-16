@@ -1,0 +1,55 @@
+Accion listacircular_busqueda (prim : puntero a nodo) es
+	ambiente
+		nodo = registro
+			num : entero
+			prox: puntero a nodo
+		fin registro
+
+		p, q, ant, aux : puntero a nodo
+		numusu, cont : entero
+
+	proceso
+		si prim = nill entonces 
+			esc ("errro lista vacia")
+		sino
+			// centinela -- busca-- encuentra y frena (no encuentra repetidos)
+			esc ("Ingrese un numero a buscar")
+			leer (numusu)
+			p := prim
+			// analizan del nodo 1 al nodo (n-1)
+			mientras *p.prox <> prim y *p.num <> numusu hacer
+				p := *p.prox
+			fin mientras
+
+			si *p.prox = prim entonces 
+				// analizan el nodo n
+				// llegue al ultimo y no lo encontre todavia
+				si *p.num = numusu entonces 
+					esc ("numero encontrado")
+				sino
+					esc ("el numero no existe en la lista")
+				fin si
+			sino
+				esc ("el numero se encontro")
+			fin si
+
+			// busqueda lineal -- repetidos
+			esc ("Ingrese un numero a buscar")
+			leer (numusu)
+			p := prim
+			cont := 0
+			// analizan del nodo 1 al nodo (n-1)
+			mientras *p.prox <> prim hacer 
+				si *p.num = numusu entonces 
+					cont := cont + 1
+				fin si
+				p := *p.prox
+			fin mientras
+			si *p.num = numusu entonces  // hago lo mismo para el ultimo nodo
+				cont := cont + 1
+			fin si
+
+			esc ("cantidad de veces encontrado :", cont)
+		fin si
+	fin proceso
+fin accion

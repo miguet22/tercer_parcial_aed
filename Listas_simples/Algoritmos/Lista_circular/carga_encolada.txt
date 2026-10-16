@@ -1,0 +1,34 @@
+Accion listacircular_carga_encolada () es
+	ambiente
+		nodo = registro
+			num : entero
+			prox: puntero a nodo
+		fin registro
+
+		prim2, q2, ant2 : puntero a nodo
+		rta : alfanumerico
+
+	proceso
+		prim2 := nill
+		esc ("desea cargar numeros")
+		leer (rta)
+	
+		mientras rta = "si" hacer 
+			nuevo (q2)
+			esc ("INGRESE numero")
+			leer (*q2.num)
+			// de aca
+			si prim2 = nill entonces 
+				prim2 := q2
+				*q2.prox := q2 // q2 apunta a si mismo
+			sino
+				*q2.prox := prim2 // lista simple *q2.prox := nill
+				*ant2.prox := q2
+			fin si
+			ant2 := q2
+			// hasta aca, lo demás es adorno
+			esc ("desea cargar numeros")
+			leer (rta)
+		fin mientras
+	fin proceso
+fin accion

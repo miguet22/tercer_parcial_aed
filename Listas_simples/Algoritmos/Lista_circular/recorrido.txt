@@ -1,0 +1,38 @@
+Accion listacircular_recorrido (prim : puntero a nodo) es
+	ambiente
+		nodo = registro
+			num : entero
+			prox: puntero a nodo
+		fin registro
+
+		p, q, ant, aux : puntero a nodo
+		contpar : entero
+
+	proceso
+		si prim = nill entonces 
+			esc ("error lista vacia")
+		sino
+			p := prim
+			// recorrer del nodo 1 al 6
+			mientras *p.prox <> prim hacer 
+				p := *p.prox
+			fin mientras
+			// salgo en en el nodo 7
+		fin si
+
+		// contar los numeros pares que hay (lista circular)
+		p := prim
+		contpar := 0
+		// recorrer del nodo 1 al 6
+		mientras *p.prox <> prim hacer 
+			si *p.num mod 2 = 0 entonces 
+				contpar := contpar + 1
+			fin si
+			p := *p.prox
+		fin mientras
+		// tengo que tratar el ultimo nodo
+		si *p.num mod 2 = 0 entonces 
+			contpar := contpar + 1
+		fin si
+	fin proceso
+fin accion

@@ -1,0 +1,58 @@
+Accion listasimple_carga_ordenada () es  
+	ambiente
+
+	nodo = registro
+		// datos
+		edad: entero
+		
+		// punteros internos
+		prox: puntero a nodo
+	fin registro
+	// punteros externos
+	prim2, p2, q2, ant2: puntero a nodo
+
+	proceso
+		esc ("desea cargar numeros")
+		leer (rta)
+		mientras rta = "si" hacer 
+
+			nuevo (q2)
+			esc ("INGRESE edad")
+			leer (*q2.edad)
+			// de aca
+			si prim2 = nill entonces 
+				// lista vacia
+				prim2 := q2
+				*q2.prox := nill
+			sino
+				// tengo que ver donde lo acomodo al nuevo nodo
+				p2 := prim2
+				mientras p2 <> nill y *p2.edad < *q2.edad hacer 
+					ant2 := p2
+					p2 := *p2.prox
+				fin mientras
+
+				// 3 caminos
+				si p2 = prim2 entonces 
+					// camino1: al inicio
+					*q2.prox := prim2
+					prim2 := q2
+				sino
+					si p2 = nill entonces 
+						// camino2: al final
+						*ant2.prox := q2
+						*q2.prox := nill
+					sino
+						// camino3: en el medio de dos nodos
+						*ant2.prox := q2
+						*q2.prox := p2
+					fin si
+				fin si
+			fin si
+			// hasta aca, lo demas es "adorno"
+
+			esc ("desea cargar numeros")
+			leer (rta)
+		fin mientras
+	fin proceso
+fin accion

@@ -1,0 +1,111 @@
+Genere un algoritmo que recorra una secuencia texto y genere una lista simplemente encadenada con la frecuencia de utilización de cada letra. La lista debe mantenerse ordenada alfabéticamente y al final informar cual fue la frecuencia de cada letra y cuáles fueron la de mayor y menor frecuencia.
+
+Accion 4.7() es 
+	ambiente
+
+	sec: secuencia de caracter
+	v: caracter
+
+	nodo = registro
+		letra: caracter
+		frec: entero
+		prox : puntero a nodo
+	fin registro
+	prim,p,q,ant : puntero a nodo
+
+	max_frec, menor_frec : entero
+	maxlet, menlet: entero
+
+	procedimiento carga_lista () es 
+		nuevo (q)
+		*q.letra := v
+		*q.frec := 1 
+
+		si prim = nill entonces 
+			// lista vacia
+			prim:= q
+			*q.prox := nill
+		sino
+			// tengo que ver donde lo acomodo al nuevo nodo (orden alfabetico x letra)
+			p := prim
+			mientras p <> nill y *p.letra < *q.letra hacer 
+				ant := p
+				p := *p.prox
+			fin mientras
+
+			// 3 caminos
+			si p = prim entonces 
+				// al inicio
+				*q.prox := prim
+				prim := q
+			sino
+				si p = nill entonces 
+					// al final
+					*ant.prox := q
+					*q.prox := nill
+				sino
+					// en el medio de dos nodos
+					*ant.prox := q
+					*q.prox := p
+				fin si
+			fin si
+		fin si
+	fin procedimiento
+
+	proceso
+		arr (sec)
+		avz (sec,v)
+		prim := nill
+		mientras nofds (sec) hacer 
+			si prim = nill entonces 
+				// lista vacia, creo el nodo y lo inserto
+				nuevo (q)
+				*q.letra := v
+				*q.frec := 1 // frecuencia lo tomo como "cantidad de apariciones"
+				*q.prox := nill
+				prim := q
+			sino
+				p := prim
+				mientras p <> nill y *p.letra <> v hacer
+					p := *p.prox
+				fin mientras
+				si *p.letra = v entonces // encontre la letra, sumo la frecuencia
+					*p.frec := *p.frec + 1
+				sino
+					// no existe la letra en la lista
+					// debo cargarla de manera ordenada alfabeticamente
+					carga_lista ()
+				fin si
+			fin si
+			avz (sec,v) // avanzo a la otra letra en la secuencia
+		fin mientras
+		// lista ya cargada
+
+
+
+		// al final informar cual fue la frecuencia de cada letra y cuáles fueron la de mayor y menor frecuencia.
+		max_frec := 0
+		menor_frec := HV
+		p := prim
+		mientras p <> nill hacer 
+			esc ("letra:", *p.letra "frecuencia:", *p.frec)
+
+			si max_frec < *p.frec entonces 
+				max_frec:=*p.frec
+				max_let := *p.letra
+			fin si
+
+			si menor_frec > *p.frec entonces 
+				menor_frec:=*p.frec
+				men_let := *p.letra
+			fin si
+			p:= *p.prox
+		fin mientras
+
+		esc ("LETRA CON MAYOR FRECUENCIA:",max_let)
+		esc ("LETRA CON MENOR FRECUENCIA:", men_let)
+		cerrar (sec)
+	fin proceso
+fin accion
+
+

@@ -1,0 +1,46 @@
+Accion listasimple_busqueda (prim : puntero a nodo) es  // supuestamente la lista viene cargada, nos viene la direccion del primer nodo
+	ambiente
+
+	nodo = registro
+		// datos
+		nya : alfanumerico
+		
+		// punteros internos
+		prox: puntero a nodo
+	fin registro
+	// punteros externos
+	p, q, ant, aux: puntero a nodo
+
+	proceso
+		// busqueda
+
+		si prim = nill entonces 
+			esc ("error lista de entrada vacia, no puedo recorrer")
+		sino
+			esc ("ingrese el nombre a buscar")
+			leer (nomusu)
+			p := prim
+			// es como la busqueda con centinela en arreglos , encuentra y frena -- no encuentra repetidos
+			mientras p <> nill y *p.nya <> nomusu hacer 
+				p := *p.prox
+			fin mientras
+
+			si p = nill entonces 
+				esc ("error, no existe esa persona")
+			sino
+				esc ("persona encontrada")
+				// p apunta a ese nodo donde se encontro el nombre a buscar
+			fin si
+			-----------------------------------------------------------
+			p := prim
+			// busqueda lineal -- a medida que recorro voy viendo los nodos--- encuentra repetidos
+			mientras p <> nill  hacer 
+				si *p.nya = nomusu entonces 
+					esc ("alumno encontrado")
+				fin si
+				p := *p.prox
+			fin mientras
+		fin si
+	fin proceso
+fin accion
+

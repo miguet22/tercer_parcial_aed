@@ -1,0 +1,274 @@
+Accion listas_circ (prim:puntero a nodo) es 
+	ambiente
+
+	nodo = registro
+		num : entero
+		prox:puntero a nodo
+	fin registro
+
+	p,q,ant,aux : puntero a nodo
+	prim2,p2,q2,ant2,ultimo: puntero a nodo // lista de salida
+	proceso
+		// recorrido
+
+		p := prim
+		// recorria del nodo 1 al nodo 7
+		mientras p <> nill hacer // lista simple
+			p := *p.prox
+		fin mientras
+		// salgo parado en nill
+
+		si prim = nill entonces 
+			esc ("error lista vacia")
+		sino
+
+			p := prim
+			// recorrer del nodo 1 al 6
+			mientras *p.prox <> prim hacer 
+				p := *p.prox
+			fin mientras
+			// salgo en en el nodo 7
+		fin si
+
+		// contar los numeros pares que hay (lista circular)
+		p := prim
+		contpar := 0
+		// recorrer del nodo 1 al 6
+		mientras *p.prox <> prim hacer 
+			si *p.num mod 2 = 0 entonces 
+				contpar := contpar + 1
+			fin si
+			p := *p.prox
+		fin mientras
+		// tengo que tratar el ultimo nodo
+		si *p.num mod 2 = 0 entonces 
+			contpar := contpar + 1
+		fin si
+
+		// busqueda
+		si prim = nill entonces 
+			esc ("errro lista vacia")
+		sino
+			// centinela -- busca-- encuentra y frena (no encuentra repetidos)
+			esc ("Ingrese un numero a buscar")
+			leer (numusu)
+			p := prim
+			// analizan del nodo 1 al nodo (n-1)
+			mientras *p.prox <> prim y *p.num <> numusu hacer
+				p := *p.prox
+			fin mientras
+
+			si *p.prox = prim entonces 
+				// analizan el nodo n
+				// llegue al ultimo y no lo encontre todavia
+				si *p.num = numusu entonces 
+					esc ("numero encontrado")
+				sino
+					esc ("el numero no existe en la lista")
+				fin si
+			sino
+				esc ("el numero se encontro")
+			fin si
+
+			// busqueda lineal -- repetidos
+			esc ("Ingrese un numero a buscar")
+			leer (numusu)
+			p := prim
+			cont := 0
+			// analizan del nodo 1 al nodo (n-1)
+			mientras *p.prox <> prim hacer 
+				si *p.num = numusu entonces 
+					cont := cont + 1
+				fin si
+				p := *p.prox
+			fin mientras
+			si *p.num = numusu entonces  // hago lo mismo para el ultimo nodo
+				cont := cont + 1
+			fin si
+
+			esc ("cantidad de veces encontrado :", cont)
+		fin si
+
+		// eliminacion
+
+		// busqueda
+		si prim = nill entonces 
+			esc ("errro lista vacia")
+		sino
+			// busca - encuentra uno y elimina
+			esc ("Ingrese un numero a eliminar")
+			leer (numusu)
+			p := prim
+			// analizan del nodo 1 al nodo (n-1)
+			mientras *p.prox <> prim y *p.num <> numusu hacer
+				ant := p
+				p := *p.prox
+			fin mientras
+
+			si *p.prox = prim entonces 
+				// analizan el ultimo nodo
+				si *p.num = numusu entonces 
+					// elimino el ultimo nodo
+					*ant.prox := prim // el anteultimo apunta al primero, pq justamente elimino el ultimo
+				fin si
+				disponer (p)
+			sino
+				// elimino o el primer nodo o cualquier nodo menos el ultimo
+				si p = prim entonces 
+					prim := *p.prox
+				sino
+					*ant.prox := *p.prox
+				fin si
+				disponer (p)
+			fin si
+
+
+			// a medida que encuentro elimino
+			esc ("Ingrese un numero a eliminar")
+			leer (numusu)
+			p := prim
+
+			mientras *p.prox <> prim hacer 
+				// axel
+				aux := p
+				si *p.num = numusu entonces 
+					si p = prim entonces 
+						prim := *p.prox
+					sino
+						*ant.prox := *p.prox
+					fin si
+					disponer (p)
+				sino
+					ant := p
+				fin si
+				p := *aux.prox
+
+				// la otra forma
+
+				si *p.num = numusu entonces 
+					aux := p
+					p := *p.prox
+					si aux = prim entonces 
+						prim := *aux.prox
+					sino
+						*ant.prox := *aux.prox
+					fin si
+					disponer (p)
+				sino
+					ant := p
+					p := *p.prox
+				fin si
+			fin mientras
+			// estan en el ultimo nodo, lo analizan
+			si *p.num = numusu entonces 
+				// eliminar el ultimo nodo
+				*ant.prox := prim // al anteultimo le asigno el primero
+				disponer (p)
+			fin si 
+		fin si
+
+		// cargas
+
+		// apilada
+		prim2 := nill
+		esc ("desea cargar numeros")
+		leer (rta)
+		mientras rta = "si" hacer 
+			nuevo (q2)
+			esc ("INGRESE numero")
+			leer (*q2.num)
+
+			si prim2 = nill entonces 
+				// lista vacia
+				prim2 := q2
+				*q2.prox := q2 // q2 apunta a si mismo
+				ultimo := q2
+			sino
+				ultimo := q2
+				*q2.prox := prim2
+				prim2 := q2
+			fin si 
+
+			esc ("desea cargar numeros")
+			leer (rta)
+		fin mientras
+
+		// encolada
+
+		prim2 := nill
+		esc ("desea cargar numeros")
+		leer (rta)
+		mientras rta = "si" hacer 
+			nuevo (q2)
+			esc ("INGRESE numero")
+			leer (*q2.num)
+
+			si prim2 = nill entonces 
+				prim2 := q2
+				*q2.prox := q2 // q2 apunta a si mismo
+			sino
+				*q2.prox := prim2 // lista simple *q2.prox := nill
+				*ant2.prox := q2
+			fin si
+			ant2 := q2
+
+			esc ("desea cargar numeros")
+			leer (rta)
+		fin mientras
+
+		// ordenada
+		esc ("desea cargar numeros")
+		leer (rta)
+		mientras rta = "si" hacer 
+
+			nuevo (q2)
+			esc ("INGRESE numero")
+			leer (*q2.num)
+			// de aca
+			si prim2 = nill entonces 
+				// lista vacia
+				prim2 := q2
+				*q2.prox := q2
+			sino
+				p2 := prim2
+				mientras *p2.prox <> prim2 y *p2.num < *q2.num hacer 
+					ant2 := p2
+					p2 := *p2.prox
+				fin mientras
+
+				si *p2.prox = prim2 entonces 
+					// estoy parado en el ultimo nodo veo donde lo meto
+					si *q2.num < *p2.num entonces 
+						// q2 no es el ultimo, es el anteultimo
+						*q2.prox := p
+						*ant2.prox := q2
+					sino
+						// q2 pasa a ser el ultimo
+						*q2.prox := prim2
+						*p2.prox := q2
+					fin si 
+				sino
+					// es pq va al inicio o en el medio de dos nodos
+					si p2 = prim2 entonces 
+						// cargo al inicio
+						// moverme de nuevo al ultimo nodo
+						aux := prim2
+						mientras *aux.prox <> prim2 hacer 
+							aux := *aux.prox
+						fin mientras
+						// sali en el ultimo nodo
+						*aux.prox := q2
+						*q2.prox := prim2
+						prim2 := q2
+					sino
+						// cargo en el medio
+						*ant2.prox := q2
+						*q2.prox := p2
+					fin si
+				fin si
+			fin si
+			esc ("desea cargar numeros")
+			leer (rta)
+		fin mientras
+	fin proceso
+fin accion

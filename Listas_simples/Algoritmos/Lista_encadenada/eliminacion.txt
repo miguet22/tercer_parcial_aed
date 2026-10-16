@@ -1,0 +1,77 @@
+Accion listasimple_eliminacion (prim : puntero a nodo) es  // supuestamente la lista viene cargada, nos viene la direccion del primer nodo
+	ambiente
+
+	nodo = registro
+		// datos
+		nya : alfanumerico
+		
+		// punteros internos
+		prox: puntero a nodo
+	fin registro
+	// punteros externos
+	p, q, ant, aux: puntero a nodo
+
+	proceso
+		// eliminacion, hay 2 "tipos" de eliminacion
+			// 1- busco, encuentro y elimino (un elemento)
+			// 2- a medida recorro, voy eliminando (eliminar varios elementos)
+
+		// 1- busco, encuentro y elimino (un elemento) -- la mas "facil"
+		si prim = nill entonces 
+			esc ("error lista de entrada vacia, no puedo recorrer")
+		sino
+			esc ("ingrese el nombre a eliminar")
+			leer (nomusu)
+			p := prim
+			
+			mientras p <> nill y *p.nya <> nomusu hacer 
+				ant := p // resguardo el nodo anterior
+				p := *p.prox
+			fin mientras
+			si p = nill entonces 
+				esc ("error, no existe esa persona no la puedo borrar")
+			sino
+				esc ("persona encontrada")
+				// reasignacion de punteros
+				si prim = p entonces 
+					// camino 1 - elimino el primer nodo
+					prim := *p.prox
+				sino
+					// camino 2- elimino otro nodo
+					*ant.prox := *p.prox
+				fin si
+				disponer (p) // elimino el nodo, p en este momento esta apuntando al nodo que quiero eliminar
+			fin si
+		fin si
+
+		// 2- a medida recorro, voy eliminando (eliminar varios elementos)
+		si prim = nill entonces 
+			esc ("error lista de entrada vacia, no puedo recorrer")
+		sino
+			esc ("ingrese el nombre a eliminar")
+			leer (nomusu)
+			p := prim
+			
+			mientras p <> nill  hacer 
+				si *p.nya = nomusu entonces 
+					// elimino
+					aux := p // es un auxiliar para eliminar y que no se pierda p, ya que p maneja el ciclo del recorrido
+					p := *p.prox
+					si prim = aux entonces 
+						// elimino el primer nodo
+						prim := *aux.prox
+					sino
+						// elimino otro nodo
+						*ant.prox := *aux.prox
+					fin si
+					disponer (aux)
+				sino
+					ant := p
+					p := *p.prox
+				fin si
+
+			fin mientras
+		fin si 
+	fin proceso
+fin accion
+

@@ -1,0 +1,85 @@
+Accion listacircular_eliminacion (prim : puntero a nodo) es
+	ambiente
+		nodo = registro
+			num : entero
+			prox: puntero a nodo
+		fin registro
+
+		p, q, ant, aux : puntero a nodo
+		numusu : entero
+
+	proceso
+		si prim = nill entonces 
+			esc ("errro lista vacia")
+		sino
+			// busca - encuentra uno y elimina
+			esc ("Ingrese un numero a eliminar")
+			leer (numusu)
+			p := prim
+			// analizan del nodo 1 al nodo (n-1)
+			mientras *p.prox <> prim y *p.num <> numusu hacer
+				ant := p
+				p := *p.prox
+			fin mientras
+
+			si *p.prox = prim entonces 
+				// analizan el ultimo nodo
+				si *p.num = numusu entonces 
+					// elimino el ultimo nodo
+					*ant.prox := prim // el anteultimo apunta al primero, pq justamente elimino el ultimo
+				fin si
+				disponer (p)
+			sino
+				// elimino o el primer nodo o cualquier nodo menos el ultimo
+				si p = prim entonces 
+					prim := *p.prox
+				sino
+					*ant.prox := *p.prox
+				fin si
+				disponer (p)
+			fin si
+
+			// a medida que encuentro elimino
+			esc ("Ingrese un numero a eliminar")
+			leer (numusu)
+			p := prim
+
+			mientras *p.prox <> prim hacer 
+				// axel
+				aux := p
+				si *p.num = numusu entonces 
+					si p = prim entonces 
+						prim := *p.prox
+					sino
+						*ant.prox := *p.prox
+					fin si
+					disponer (p)
+				sino
+					ant := p
+				fin si
+				p := *aux.prox
+
+				// la otra forma
+				si *p.num = numusu entonces 
+					aux := p
+					p := *p.prox
+					si aux = prim entonces 
+						prim := *aux.prox
+					sino
+						*ant.prox := *aux.prox
+					fin si
+					disponer (p)
+				sino
+					ant := p
+					p := *p.prox
+				fin si
+			fin mientras
+			// estan en el ultimo nodo, lo analizan
+			si *p.num = numusu entonces 
+				// eliminar el ultimo nodo
+				*ant.prox := prim // al anteultimo le asigno el primero
+				disponer (p)
+			fin si 
+		fin si
+	fin proceso
+fin accion

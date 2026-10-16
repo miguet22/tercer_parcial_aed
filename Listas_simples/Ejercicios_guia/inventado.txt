@@ -1,0 +1,105 @@
+Un profesor cuenta con una lista de todas las notas de sus alumnos.
+Se pide
+1- cargar nuevas notas si el profesor desea, las notas deben estar ordenadas por nombre de alumno
+2- una vez que el profesor no quiera cargar mas notas, informar el promedio de nota x alumno e informar nombre del alumno que mas nota saco y el que menos saco.
+3- Informar cuantos rindieron
+
+accion notas_Examen (prim : puntero a nodo) es
+	ambiente
+	nodo = registro
+		nya : alfanumerico
+		nota: entero
+		prox: puntero a nodo
+	fin registro
+	p,q,ant : puntero a nodo
+
+	suma_notas: entero
+	cant_al : entero
+
+	nombremay : alfanumerico
+	nombremenor: alfanumerico
+	notamay : entero
+	notamenor : entero
+
+	proceso
+		esc ("Desea cargar nuevas notas a la lista?")
+		leer (rta)
+		mientras (rta = "SI") hacer 
+
+			nuevo (q)
+			esc ("Ingrese nombre del alumno")
+			leer (*q.nya)
+			esc ("Ingrese nota del alumno")
+			leer (*q.nota)
+
+			// carga ordenada
+			si prim = nill entonces 
+				// lista vacia
+				prim := q
+				*q.prox := nill
+			sino
+				p := prim
+				mientras (p <> nill) y (*p.nya < *q.nya) hacer 
+					ant := p
+					p := *p.prox
+				fin mientras
+
+				si p = prim entonces 
+					// camino 1 -- cargo al inicio
+					*q.prox := prim
+					prim := q
+				sino
+					si p = nill entonces 
+						// camino 2 -- cargo al final
+						*ant.prox := q
+						*q.prox := nill
+					sino
+						// camino 3 -- en el medio
+						*ant.prox := q
+						*q.prox := p
+					fin si
+				fin si
+			fin si
+			esc ("Desea cargar otra nota a la lista?")
+			leer (rta)
+		fin mientras
+
+		// ya no carga mas notas el profesor
+		// consigna 2 y 3
+		notamay := 0 // resguardas el mas grande
+		notamen := HV // resguardas el mas chico
+
+		suma_notas := 0
+		cant_al := 0
+		// supong que mínimo hay una nota cargada, por eso no hago **si p = prim **
+		p := prim
+		mientras p <> nill hacer 
+			suma_notas := suma_notas + *p.nota
+			cant_al := cant_al + 1
+
+			si notamay < *p.nota entonces 
+				notamay := *p.nota
+				nombremay := *p.nya
+			fin si
+
+			si notamen > *p.nota entonces 
+				notamen := *p.nota
+				nombremen := *p.nya
+			fin si
+
+			
+			p := *p.prox
+		fin mientras
+
+		esc ("promedio:", suma_notas / cant_al)
+		esc ("total de alumnos que rindieron:", cant_al)
+		esc ("NOMBRE DEL QUE SE SACO MAS NOTA:", nombremay)
+		esc ("NOMBRE DEL QUE SE SACO MENOS NOTA:", nombremen)
+
+		// muestre todos los que sacaron la nota max
+		// muestre todos los que sacaron la nota min
+
+	finpproceso
+fin accion
+
+

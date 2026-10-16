@@ -1,0 +1,66 @@
+Accion listacircular_carga_ordenada () es
+	ambiente
+		nodo = registro
+			num : entero
+			prox: puntero a nodo
+		fin registro
+
+		prim2, p2, q2, ant2, aux : puntero a nodo
+		rta : alfanumerico
+
+	proceso
+		esc ("desea cargar numeros")
+		leer (rta)
+		mientras rta = "si" hacer 
+			nuevo (q2)
+			esc ("INGRESE numero")
+			leer (*q2.num)
+			// de aca
+			si prim2 = nill entonces 
+				// lista vacia
+				prim2 := q2
+				*q2.prox := q2
+			sino
+				p2 := prim2
+				mientras *p2.prox <> prim2 y *p2.num < *q2.num hacer 
+					ant2 := p2
+					p2 := *p2.prox
+				fin mientras
+
+				si *p2.prox = prim2 entonces 
+					// estoy parado en el ultimo nodo veo donde lo meto
+					si *q2.num < *p2.num entonces 
+						// q2 no es el ultimo, es el anteultimo
+						*q2.prox := p
+						*ant2.prox := q2
+					sino
+						// q2 pasa a ser el ultimo
+						*q2.prox := prim2
+						*p2.prox := q2
+					fin si 
+				sino
+					// es pq va al inicio o en el medio de dos nodos
+					si p2 = prim2 entonces 
+						// cargo al inicio
+						// moverme de nuevo al ultimo nodo
+						aux := prim2
+						mientras *aux.prox <> prim2 hacer 
+							aux := *aux.prox
+						fin mientras
+						// sali en el ultimo nodo
+						*aux.prox := q2
+						*q2.prox := prim2
+						prim2 := q2
+					sino
+						// cargo en el medio
+						*ant2.prox := q2
+						*q2.prox := p2
+					fin si
+				fin si
+			fin si
+			// hasta aca, lo demás es adorno
+			esc ("desea cargar numeros")
+			leer (rta)
+		fin mientras
+	fin proceso
+fin accion
