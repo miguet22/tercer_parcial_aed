@@ -1,0 +1,102 @@
+// este ejercicio fue dado x el profesor Axel en el turno tarde
+// HAGO la suposición que un cliente puede recibir mas de un regalo, ya que la consigna esta medio mal escrita
+
+accion ejercicioaxel (prim1: puntero a nodo1 , prim2: puntero a nodo2) es
+	ambiente
+	// nodo1 : lista de los clientes
+	// nodo2 : lista circular de los regalos
+
+	nodo1 = registro
+		nya
+		telefono
+		prox: puntero a nodo1
+	fin registro
+	p1 : puntero a nodo1
+
+	nodo2 = registro
+		nombrereg
+		cantdisp
+		prox: puntero a nodo2
+	fin registro
+	p2 : puntero a nodo2
+
+	nodosal = registro
+		nya
+		cantreg
+		prox:puntero a nodosal
+	fin registro
+	prim3,p3,q3,ant3 : puntero a nodosal
+
+	proceso
+
+		si (prim1 = nill) o (prim2 = nill) entonces 
+			esc ("error, una de la lista esta vacia, no puedo hacer nada")
+		sino
+			// es pq ambas estan no vacias
+			prim3 := nill
+			p2 := prim2 // me paro en mi primer regalo
+			p1 := prim1 
+			mientras p1 <> nill hacer 
+				
+				// estan en un cliente tengo que ver si le doy un regalo
+				
+
+				// recorrer lista circular y ver que haya al menos un regalo disponible
+				regalos_disp := falso
+				mientras *p2.prox <> prim2 y *p2.cantdisp = 0 hacer 
+					p2 := *p2.prox
+				fin mientras
+
+				si *p2.prox = prim2 entonces 
+					// estoy en mi ultimo nodo
+					si *p2.cantdisp > 0 entonces
+						regalos_disp := verdadero
+						*p2.cantdisp := *p2.cantdisp - 1
+					fin si
+				sino
+					// p2.cantdisp <> 0 
+					regalos_disp := verdadero
+					*p2.cantdisp := *p2.cantdisp - 1
+				fin si
+
+				// si hay un regalo le doy ese regalo a la persona
+				si regalos_disp entonces 
+					si prim3 = nill entonces 
+						// lista de salida vacia, creo el nodo
+						nuevo (q3)
+						*q3.nya := *p1.nya
+						*q3.cantreg := 1
+
+						prim3 := q3
+						*q3.prox := nill
+					sino
+						// lista no vacia, debo recorrer la lista y buscarlo al cliente
+						p3 := prim3
+						mientras p3 <> nill y *p3.nya <> *p1.nya hacer 
+							ant3 := p3
+							p3 := *p3.prox
+						fin mientras
+
+						si p3 = nill entonces 
+							// no existe el cliente, lo cargo
+							nuevo (q3)
+							*q3.nya := *p1.nya
+							*q3.cantreg := 1
+
+							// carga encolada
+							*ant3.prox := q3
+							*q3.prox := nill
+						sino
+							// *p3.nya = *p1.nya
+							// el cliente existe en la lista de salida
+							*p3.cantreg := *p3.cantreg + 1
+						fin si
+					fin si
+				fin si
+				// si no habia regalo disponible lo unico que hago es avanzar a otro cliente
+				p1 := *p1.prox
+
+			fin mientras
+		fin si
+	fin proceso
+fin accion

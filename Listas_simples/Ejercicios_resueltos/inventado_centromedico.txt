@@ -1,0 +1,187 @@
+Un centro medico requiere de usted para poder hacer un programa de turnos. Lo ideal es ofrecerle al recepcionista un menú que cuente con las siguientes opciones
+1-Agendar turno.
+2-Buscar paciente.
+
+Ya se cuenta con una lista de turnos del mes, si se desea agendar un turno este mismo debe ser añadido a la lista.
+Un turno tiene la siguiente info
+-Nombre doctor
+-Nombre paciente
+-DNI 
+-Codigo Obra Social paciente
+-Fecha turno
+-Hora
+Para poder agendar un turno, el paciente si o si debe existir en la listas de pacientes (esta lista ya viene cargada), si no existe, se deberá darlo de alta en la lista.
+La info del paciente es la siguiente
+-DNI
+-Nombre y ap
+-Edad
+-Codigo Obra social
+-Cantidad de turnos
+
+*CONSIDERAR QUE SI UN PACIENTE LLEGA A LA CANTIDAD DE 45 TURNOS, DEBERA SER DADO DE BAJA E INFORMAR POR PANTALLA*
+
+Accion centromedico (prim1: puntero a nodo1, prim2: puntero a nodo2) es
+
+	ambiente
+	// nodo1 -- lista de turnos
+	// nodo2 -- lista de pacientes
+
+	nodo1 = registro
+		Nombre doctor
+		Nombre paciente
+		DNI 
+		Codigo Obra Social paciente
+		Fechaturno = registro
+			aa
+			mm
+			dd
+		fin registro
+		Hora
+
+		prox : puntero a nodo1
+	fin registro
+	p1,q1,ant1 : puntero a nodo1
+
+	nodo2 = registro
+		DNI
+		Nombre y ap
+		edad
+		Codigo Obra social
+		Cantidad de turnos
+		prox : puntero a nodo2
+	fin registro
+
+	p2,q2,ant2: puntero a nodo2
+
+	rta: alfanumerico
+	op: entero
+
+	procedimiento cargar_turno () es 
+		nuevo (q1)
+		esc ("Ingrese nombre del doctor")
+		leer (*q1.nomdoctor)
+		*q1.nya := *p2.nya
+		*q1.dni := *p2.dni
+		*q1.codobra := *p2.codobra
+
+		esc ("Ingrese el dia de la fecha del turno")
+		leer (*q1.fechaturno.dd)
+		esc ("Ingrese el mes de la fecha del turno")
+		leer (*q1.fechaturno.mm)
+		esc ("Ingrese el año de la fecha del turno")
+		leer (*q1.fechaturno.año)
+
+		esc ("Ingrese hora del turno")
+		leer (*q1.hora)
+
+		// carga ordenad x fechaturno
+
+		si prim1 = nill entonces 
+			// lista vacia
+			prim1 := q1
+			*q1.prox := nill
+		sino
+			p1 := prim1
+			mientras p1 <> nill y *p1.fechaturno < *q1.fechaturno hacer 
+				ant1 := p1
+				p1 := *p1.prox
+			fin mientras
+			si p1 = prim1 entonces 
+				// caso 1 : al inicio de la lista
+				*q1.prox := prim1
+				prim1 := q1
+			sino
+				si p1 = nill entonces 
+					// caso2: al final de la lista
+					*ant1.prox := q1
+					*q1.prox := nill
+				sino
+					// caso3: en el medio de dos nodos
+					*ant1.prox := q1
+					*q1.prox := p1
+				fin si
+			fin si
+		fin si
+	fin procedimiento
+
+	proceso 
+		// suposicion: de que ambas listas vienen cargadas, no hago la "si prim1 = nill"
+
+		esc ("Desea ver el menu de opciones?")
+		leer (rta)
+
+		mientras (rta = "si") hacer 
+
+			esc ("OPCIONES:")
+			esc ("1-Agendar turno.")
+			esc ("2-Buscar paciente")
+
+			leer (op)
+
+			esc ("Ingrese dni del paciente a buscar")
+			leer (dniusu)
+			
+
+			p2 := prim2 
+			mientras p2 <> nill y *p2.dni <> dni hacer 
+				ant2 := p2
+				p2 := *p2.prox
+			fin mientras
+
+			si op = 1 entonces 
+				
+				// buscar en la lista de pacientes si existe el paciente
+
+				si p2 = nill entonces 
+					// no existe el paciente, debo cargarlo en la lista de pacientes
+					nuevo (q2)
+					*q2.dni := dni
+					esc ("Ingrese nya")
+					leer (*q2.nya)
+					esc ("Ingrese edad")
+					leer (*q2.edad)
+					esc ("Ingrese cod obra social")
+					leer (*q2.codobra)
+					*q2.cantturnos := 1
+					// carga apilada
+					si prim2 = nill entonces
+						*q2.prox := nill
+						prim2 := q2
+					sino
+						*q2.prox := prim2
+						prim2 := q2
+					fin si
+					// le doy el turno
+					cargar_turno ()
+				sino
+					// lo encontre al tipo 
+					*p2.cantturnos := *p2.cantturnos + 1
+
+					cargar_turno ()
+
+					si *p2.cantturnos = 45 entonces 
+						// lo borro de la lista
+						si p2 = prim2 entonces 
+							// borro al primero de la lista
+							prim2 := *p2.prox
+						sino
+							*ant2.prox := *p2.prox
+						fin si
+						disponer (p2)
+
+					fin si
+				fin si
+			sino
+
+				si p2 = nill entonces 
+					esc ("no existe paciente")
+				sino
+					esc ("paciente encontrado")
+				fin si
+			fin 
+			esc ("Desea ver el menu de opciones de nuevo?")
+			leer (rta)
+		fin mientras
+
+	fin proceso
+fin accion
