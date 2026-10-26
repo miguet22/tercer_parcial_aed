@@ -1,0 +1,218 @@
+Accion listasdobles (prim, ult : puntero a nodo) es 
+	ambiente
+
+	nodo = registro
+		// datos
+		num: entero
+		// punteros internos
+		prox, ant : puntero a nodo
+	fin registro
+	p,q,aux : puntero a nodo
+
+	prim2,ult2,p2,q2 : puntero a nodo  // para las cargas
+	proceso
+		// recorrido
+		si prim = nill o ult = nill entonces 
+			esc ("error la lista viene vacia")
+		sino
+			p := prim // desde el primer elemento al ultimo
+			mientras p <> nill hacer 
+				p := *p.prox
+			fin mientras
+
+			p := ult // recorrido de derecha a izq (del ultimo elemento al primero)
+			mientras p <> nill hacer 
+				p := *p.ant
+			fin mientras
+		fin si 
+
+		// busqueda 
+		si prim = nill o ult = nill entonces 
+			esc ("error la lista viene vacia")
+		sino
+			// busqueda con centinela que busca, encuentra y frena
+			esc ("ingrese un numero a buscar")
+			leer (numusu)
+			p := prim
+			mientras p <> nill y *p.num <> numusu hacer 
+				p := *p.prox
+			fin mientras
+
+			si p = nill entonces 
+				esc ("error, no se encontro el numero a buscar")
+			sino
+				esc ("numero encontrado")
+				// p queda parado en el nodo que posee el elemento a buscar
+			fin si
+
+			// busqueda lineal, que encuentra repetidos
+			esc ("ingrese un numero a buscar")
+			leer (numusu)
+			cont := 0
+			p := prim
+			mientras p <> nill hacer
+				si *p.num = numusu entonces 
+					cont := cont + 1
+				fin si 
+				p := *p.prox
+			fin mientras
+
+			esc ("el numero a buscar se encontro:", cont "veces")
+		fin si
+
+		// eliminacion
+		si prim = nill o ult = nill entonces 
+			esc ("error la lista viene vacia")
+		sino
+			esc ("ingrese un numero a borrar")
+			leer (numusu)
+			p := prim
+			mientras p <> nill y *p.num <> numusu hacer 
+				p := *p.prox
+			fin mientras
+
+			si p = nill entonces 
+				esc ("error, no se encontro el numero a buscar")
+			sino
+				// el numero se encontro hay que eliminarlo
+				si prim = ult entonces 
+					// elimino el unico de la lista
+					prim := nill
+					ult := nill
+				sino
+
+					si p = prim entonces
+						// elimino el primero
+						prim := *p.prox
+						*(*p.prox).ant := nill
+					sino
+
+						si p = ult entonces
+							// elimino el ultimo
+							ult := *p.ant
+							*(*p.ant).prox := nill
+						sino
+							// eliminar uno del medio
+
+							*(*p.ant).prox := *p.prox
+							*(*p.prox).ant := *p.ant
+						fin si
+					fin si
+				fin si
+				disponer (p)
+			fin si
+		fin si
+
+		// carga apilada}
+
+		prim2 := nill
+		ult2 := nill
+
+		esc ("Desea cargar una lista")
+		leer (rta)
+		mientras rta = "si" hacer 
+			nuevo (q2)
+			esc ("ingrese numero")
+			leer (*q2.num)
+
+			// apilada
+			si prim2 = nill entonces 
+				prim2 := q2
+				ult2 := q2
+				*q2.prox := nill
+				*q2.ant := nill
+			sino
+				*q2.prox := prim2
+				*prim2.ant := q2
+				*q2.ant := nill
+				prim2 := q2
+			fin si
+
+			esc ("Desea cargar otro numero")
+			leer (rta)
+		fin mientras
+
+		// carga encolada
+		prim2 := nill
+		ult2 := nill
+
+		esc ("Desea cargar una lista")
+		leer (rta)
+		mientras rta = "si" hacer 
+			nuevo (q2)
+			esc ("ingrese numero")
+			leer (*q2.num)
+
+			// apilada
+			si prim2 = nill entonces 
+				prim2 := q2
+				ult2 := q2
+				*q2.prox := nill
+				*q2.ant := nill
+			sino
+				*q2.ant := ult2
+				*ult2.prox := q2
+				*q2.prox := nill
+				ult2 := q2
+			fin si
+			esc ("Desea cargar otro numero")
+			leer (rta)
+		fin mientras
+
+
+		// carga ordenada
+		prim2 := nill
+		ult2 := nill
+
+		esc ("Desea cargar una lista")
+		leer (rta)
+		mientras rta = "si" hacer 
+			nuevo (q2)
+			esc ("ingrese numero")
+			leer (*q2.num)
+
+			// apilada
+			si prim2 = nill entonces 
+				prim2 := q2
+				ult2 := q2
+				*q2.prox := nill
+				*q2.ant := nill
+			sino
+				p2 := prim2
+
+				mientras p2 <> nill y *p2.num < *q2.num hacer 
+					p := *p.prox
+				fin mientras
+
+				si p2 = prim2 entonces 
+					// camino 1 : al inicio
+					*q2.prox := prim2
+					*prim2.ant := q2
+					*q2.ant := nill
+					prim2 := q2
+
+				sino
+					si p2 = nill entonces 
+						// camino 2 : al final
+						*q2.ant := ult2
+						*ult2.prox := q2
+						*q2.prox := nill
+						ult2 := q2
+
+
+					sino
+						// camino 3 : en el medio
+						*q2.prox := p2
+						*q2.ant := *p2.ant
+						*(*p2.ant).prox := q2
+						*p2.ant := q2
+
+					fin si
+				fin si
+			fin si
+
+			esc ("Desea cargar otro numero")
+			leer (rta)
+		fin mientras
+	fin proceso
+fiaccion
