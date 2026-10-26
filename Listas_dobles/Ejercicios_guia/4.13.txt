@@ -1,0 +1,72 @@
+Accion 4.13 (prim,ult: puntero a nodo) es 
+	ambiente
+
+	nodo = registro
+		num: entero
+		prox,ant : puntero a nodo
+	fin registro
+
+	p: puntero a nodo 
+
+	procedimiento eliminar_rep () es 
+		aux := p
+		p := *p.prox
+
+		si aux = prim entonces 
+			// elimino el primero
+			*(*aux.prox).ant := nill
+			prim := *aux.prox
+		sino
+			si aux = ult entonces 
+				// elimino el ult
+				*(*aux.ant).prox := nill
+				ult := *aux.prox
+			sino
+				// el del medio
+				*(aux.ant).prox := *aux.prox
+				*(aux.prox).ant := *aux.ánt
+			fin si
+		fin si
+
+		disponer (aux)
+	fin procedimiento
+
+	proceso 
+		
+
+		si prim = nill o ult = nill entonces 
+			// mi suposicion es que no puedo recorrer
+			esc ("error lista vacia")
+		sino
+			p := prim
+			ordenada := verdadero
+			p := *p.prox
+
+			mientras p <> nill y ordenada hacer 
+				eliminado := falso
+				si *p.num > *(*p.ant).num entonces 
+					ordenada := verdadero
+				sino
+					si *p.num = *(*p.ant).num entonces
+						// elimino el repetido
+
+						eliminar_rep ()
+						eliminado := verdadero
+					sino
+						// *p.num < *(*p.ant).num 
+						ordenada := falso
+					fin si
+				fin si
+				si no eliminado entonces 
+					p := *p.prox
+				fin si
+			fin mientras
+
+			si ordenada entonces 
+				esc ("exito, depuracion realizada")
+			sino
+				esc ("error, la lista no vino ordenada")
+			fin si
+		fin si
+	fin proceso
+fin accion

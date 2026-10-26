@@ -1,0 +1,56 @@
+Se dispone de una lista circular con un conjunto de números naturales. Este conjunto está dividido en 6 grupos. En cada grupo el primer elemento indica la cantidad de números subsiguientes a él que integran dicho grupo. Se desea generar una nueva lista doblemente encadenada en la cual cada nodo contendrá el promedio de cada grupo. Dicha lista debe quedar ordenada en forma ascendente y, al final se debe informar cuál fue el máximo y el mínimo promedio de todo el conjunto de números.
+
+
+Accion 410 (prim : puntero a nodo) es 
+	ambiente
+
+	nodo = registro
+		num : entero
+		prox : puntero a nodo
+	fin registro
+	p : puntero a nodo // lista circ
+
+	nodosal = registro
+		prom : real
+		prox,ant : puntero a nodosal
+	fin registro
+	prims,ults,ps,qs : puntero a nodosal
+
+	procedimiento carga_ordenada_listdoble () es 
+		…
+		// carga ordenada en lista doble háganlo :D
+
+	fin procedimiento
+
+
+	proceso
+		si prim = nill entonces 
+			esc ("error, lista de entrada vacia")
+		sino
+			p := prim
+			prims := nill
+			ults := nill
+			mientras *p.prox <> prim hacer 
+
+				// estan parados en el primer nodo del grupo (verde)
+
+				sumatoria_num := 0
+				cant_num := *p.num
+
+				p := *p.prox
+				para i := 1 a cant_num hacer 
+					sumatoria := sumatoria_num + *p.num
+					si *p.prox <> prim entonces // para no entrar en bucle infinito
+						p := *p.prox
+					fin si 
+				fin para
+
+				// estoy en el primer nodo de otro grupo
+
+				nuevo (qs)
+				*qs.prom := sumatoria_num / cant_num
+				carga_ordenada_listdoble ()
+			fin mientras
+		fin si
+	fin proceso
+fin accion
