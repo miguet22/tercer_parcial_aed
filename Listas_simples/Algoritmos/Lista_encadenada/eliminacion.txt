@@ -23,7 +23,7 @@ Accion listasimple_eliminacion (prim : puntero a nodo) es  // supuestamente la l
 			esc ("ingrese el nombre a eliminar")
 			leer (nomusu)
 			p := prim
-			
+			ant = nill
 			mientras p <> nill y *p.nya <> nomusu hacer 
 				ant := p // resguardo el nodo anterior
 				p := *p.prox
@@ -33,7 +33,7 @@ Accion listasimple_eliminacion (prim : puntero a nodo) es  // supuestamente la l
 			sino
 				esc ("persona encontrada")
 				// reasignacion de punteros
-				si prim = p entonces 
+				si prim = p entonces // también pueden usar si ant = nill
 					// camino 1 - elimino el primer nodo
 					prim := *p.prox
 				sino
@@ -51,13 +51,13 @@ Accion listasimple_eliminacion (prim : puntero a nodo) es  // supuestamente la l
 			esc ("ingrese el nombre a eliminar")
 			leer (nomusu)
 			p := prim
-			
+			ant = nill
 			mientras p <> nill  hacer 
 				si *p.nya = nomusu entonces 
 					// elimino
 					aux := p // es un auxiliar para eliminar y que no se pierda p, ya que p maneja el ciclo del recorrido
 					p := *p.prox
-					si prim = aux entonces 
+					si prim = aux entonces // también pueden usar si ant = nill
 						// elimino el primer nodo
 						prim := *aux.prox
 					sino

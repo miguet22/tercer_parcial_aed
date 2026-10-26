@@ -21,14 +21,11 @@ Accion listasimple_carga_apilada () es
 			leer (*q2.edad)
 
 			// de aca
-			si prim2 = nill entonces 
-				// lista vacia
-				prim2 := q2
-				*q2.prox := nill
-			sino
-				*q2.prox := prim2
-				prim2 := q2
-			fin si
+			
+		
+			*q2.prox := prim2
+			prim2 := q2
+			
 			// hasta aca es lo que hay que saber, lo demas es de "adorno"
 			esc ("desea cargar numeros")
 			leer (rta)
@@ -59,14 +56,14 @@ Accion listasimple_carga_encolada () es
 			leer (*q2.edad)
 
 			// de aca
-			
+			*q2.prox := nill
 			si prim2 = nill entonces 
 				// lista vacia
 				prim2 := q2
-				*q2.prox := nill
+				
 			sino
 				*ant2.prox := q2
-				*q2.prox := nill
+				
 			fin si
 			ant2 := q2
 
