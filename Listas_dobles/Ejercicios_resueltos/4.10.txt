@@ -15,10 +15,47 @@ Accion 410 (prim : puntero a nodo) es
 		prox,ant : puntero a nodosal
 	fin registro
 	prims,ults,ps,qs : puntero a nodosal
-
+	sumatoria, cant_num : entero
 	procedimiento carga_ordenada_listdoble () es 
-		…
-		// carga ordenada en lista doble háganlo :D
+	
+		si prims = nill entonces 
+			prims := qs
+			ults := qs
+			*qs.prox := nill
+			*qs.ant := nill
+		sino
+			ps := prims
+
+			mientras ps <> nill y *ps.prom < *qs.prom hacer 
+				ps := *ps.prox
+			fin mientras
+
+			si ps = prims entonces 
+				// camino 1 : al inicio
+				*qs.prox := prims
+				*prims.ant := qs
+				*qs.ant := nill
+				prims := qs
+
+			sino
+				si ps = nill entonces 
+					// camino 2 : al final
+					*qs.ant := ults
+					*ults.prox := qs
+					*qs.prox := nill
+					ults := qs
+
+
+				sino
+					// camino 3 : en el medio
+					*qs.prox := ps
+					*qs.ant := *ps.ant
+					*(*ps.ant).prox := qs
+					*ps.ant := qs
+
+				fin si
+			fin si
+		fin si
 
 	fin procedimiento
 
@@ -39,7 +76,7 @@ Accion 410 (prim : puntero a nodo) es
 
 				p := *p.prox
 				para i := 1 a cant_num hacer 
-					sumatoria := sumatoria_num + *p.num
+					sumatoria_num := sumatoria_num + *p.num
 					si *p.prox <> prim entonces // para no entrar en bucle infinito
 						p := *p.prox
 					fin si 
@@ -51,6 +88,29 @@ Accion 410 (prim : puntero a nodo) es
 				*qs.prom := sumatoria_num / cant_num
 				carga_ordenada_listdoble ()
 			fin mientras
+
+			// OPCION MAS CONFIABLE SEGUN LA IA 
+
+			para g := 1 a 6 hacer
+			    cant_num := *p.num
+			    sumatoria_num := 0
+			    para i := 1 a cant_num hacer
+			        p := *p.prox
+			        sumatoria_num := sumatoria_num + *p.num
+			    fin para
+			    // al salir del para interno, p apunta al último número del grupo actual.
+			    // para posicionarnos en la cabecera del grupo siguiente:
+			    p := *p.prox
+
+			    nuevo (qs)
+				*qs.prom := sumatoria_num / cant_num
+				carga_ordenada_listdoble ()
+			
+			fin para
+
+			
+			esc ("MAXIMO PROMEDIO:", *ults.prom)
+			esc ("MINIMO PROMEDIO:", *prims.prom)
 		fin si
 	fin proceso
 fin accion
