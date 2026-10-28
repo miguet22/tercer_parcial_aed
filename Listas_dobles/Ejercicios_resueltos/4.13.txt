@@ -20,11 +20,11 @@ Accion 4.13 (prim,ult: puntero a nodo) es
 			si aux = ult entonces 
 				// elimino el ult
 				*(*aux.ant).prox := nill
-				ult := *aux.prox
+				ult := *aux.ant
 			sino
 				// el del medio
-				*(aux.ant).prox := *aux.prox
-				*(aux.prox).ant := *aux.ánt
+				*(*aux.ant).prox
+				*(*aux.prox).ant := *aux.ant
 			fin si
 		fin si
 
