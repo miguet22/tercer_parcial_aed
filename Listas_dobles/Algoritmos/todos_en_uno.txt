@@ -103,6 +103,51 @@ Accion listasdobles (prim, ult : puntero a nodo) es
 			fin si
 		fin si
 
+		// eliminacion mientras recorro
+		si prim = nill o ult = nill entonces 
+			esc ("error la lista viene vacia")
+		sino
+			esc ("ingrese un numero a borrar")
+			leer (numusu)
+			p := prim
+			mientras p <> nill hacer 
+				si *p.num = numusu entonces 
+					aux := p
+					p := *p.prox
+					si prim = ult entonces 
+						// elimino el unico de la lista
+						prim := nill
+						ult := nill
+					sino
+
+						si aux = prim entonces
+							// elimino el primero
+							prim := *aux.prox
+							*(*aux.prox).ant := nill
+						sino
+
+							si aux = ult entonces
+								// elimino el ultimo
+								ult := *aux.ant
+								*(*aux.ant).prox := nill
+							sino
+								// eliminar uno del medio
+
+								*(*aux.ant).prox := *aux.prox
+								*(*aux.prox).ant := *aux.ant
+							fin si
+						fin si
+					fin si
+					disponer (aux)
+				sino
+					p := *p.prox
+				fin si
+			fin mientras
+
+			
+			fin si
+		fin si
+
 		// carga apilada}
 
 		prim2 := nill
