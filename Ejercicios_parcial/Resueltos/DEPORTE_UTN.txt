@@ -1,0 +1,112 @@
+Accion parcialDEPORTEUTN () es 
+	ambiente
+
+	inscripciones = registro
+		codeq
+		nombreq
+		carr
+	fin registro
+	archins : archivo de inscripciones ordenado por codeq
+	regins: inscripciones
+
+	informacion = registro
+		codeq: entero
+		posicion : arreglo [1..5] de alfanumerico
+	fin registro
+	archresult archivo de informacion indexado por codeq
+	regresult : informacion
+
+
+	nodosal = registro
+		nombreq
+		carr
+		chances
+		prox :puntero a nodosal
+	fin registro
+	prims, ps, qs , ants: puntero a nodosal
+
+	procedimiento carga_listasimple () es 
+		si prims = nill entonces 
+			*qs.prox := nill
+			prims:=qs
+		sino
+			ps := prims
+			mientras ps <> nill y *ps.chances > *qs.chances hacer 
+				ants := ps
+				ps := *ps.prox
+			fin mientras
+
+			si prims = ps entonces 
+				*qs.prox := prims
+				prims := qs
+			sino
+				si ps = nill entonces 
+					*ants.prox := qs
+					*qs.prox := nill
+				sino
+					*ants.prox := qs
+					*qs.prox := ps
+				fin si
+			fin si
+
+			// opcion B
+			si prims = ps entonces 
+				*qs.prox := prims
+				prims := qs
+			sino
+				
+				*ants.prox := qs
+				*qs.prox := ps
+			fin si
+
+		fin si
+	fin procedimiento
+
+	proceso 
+
+		abrir e/ (archins)
+		abrir e/ (archresult)
+		leer (archins, regins)
+
+		prims := nill
+		mientras nofda (archins) hacer 
+			// estoy parado en un equipo que participo de los juegos de la utn
+			// a mi me interesa saber sus posiciones para saber las chances
+
+			chances := 0
+			campeon := 0
+			participo := 0
+			regresult.codeq := regins.codeq
+			leer (archresult, regresult)
+			si existe entonces 
+				// yo estoy parado en el indexado y puedo saber como fue el desempeño (arr) de el equipo en cada disciplina
+
+				para i := 1 a 5 hacer 
+					segun regresult.posicion[i] hacer 
+						"CAMPEON" : chances := chances + 20
+							campeon := campeon + 1
+						"SUBCAMPEON" : chances := chances + 12
+						"TERCERO" : chances := chances + 8
+						"Sin podio" : chances := chances + 2
+					fin segun
+
+					si regresult.posicion [i] <> "NP" entonces 
+						participo := participo + 1
+					fin si
+
+				fin para
+
+				// tengo todas las chances sumadas del equipo
+				nuevo (qs)
+				*qs.nombreq := regins.nombreeq
+				*qs.carr := regins.carr
+				*qs.chances := 5 + chances + (3 * participo) // 5 de inicio + chances por posicion obtenida + 3 chances por cada disciplina de la que participo
+				cargar_listasimple () 
+
+				esc ("NOMBRE DEL EQUIPO:",regins.nombreeq "salio campeon en un total de:", campeon "disciplinas, "y participo en un total de:", participo "disciplinas" ) // consigna 2
+			fin si
+
+			leer (archins, regins)
+		fin mientras
+	fin proceos
+fin accion

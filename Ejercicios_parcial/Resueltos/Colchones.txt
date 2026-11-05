@@ -1,0 +1,128 @@
+Accion colchones (prim : puntero a nodo) es 
+	ambiente
+
+	nodo = registro
+		codart
+		fabricante
+		modelo
+		comision
+		prox : puntero a nodo
+	fin registro
+	p : puntero a nodo
+
+
+	nodosal = registro
+		codart
+		fabricante
+		modelo
+		cantvend
+		prox :puntero a nodosal
+	fin registro
+	prims,ps,qs,ants : puntero a nodosal
+
+	infoventas = registro
+		codventa
+		codart
+		precio
+		dimensionx
+		dimensiony
+	fin registro
+	archven : archivo de infoventas 
+	regven: infoventas
+
+	procedimiento busqueda_articulo_lista1 () es
+		p := prim
+		mientras p <> nill y *p.codart <> regven.codart
+			p := *p.prox
+		fin mientras
+		si p = nill entonces 
+			fabricante := " "
+			modelo := " "
+		sino
+			fabricante := *p.fabricante
+			modelo := *p.modelo
+		fin si
+	fin procedimiento
+
+	procedimiento carga_ordenada_listasal () es 
+		ps := prims
+		mientras ps <> nill y *ps.codart < *qs.codart hacer 
+			ants := ps
+			ps := *ps.prox
+		fin mientras
+		si ps = prims entonces 
+			// camino1: al inicio
+			*qs.prox := prims
+			prims := qs
+		sino
+			
+			// camino2: al final o en el medio
+			*ants.prox := qs
+			*qs.prox := ps
+		fin si
+	fin procedimiento
+
+
+	proceso
+		si prim = nill entonces 
+			esc ("lista de colchones vacia, no puedo hacer nada")
+		sino
+			abrir e/ (archven)
+			leer (arcven,regven)
+
+			prims := nill // inicio mi lista de salida
+
+			totalplata := 0
+			// falta consigna 2
+			mientras nofda (archven) hacer 
+
+				// yo estoy parado en la venta de un articulo
+
+				// busco el nodo de ese codart en la lista de salida
+
+				si prims = nill entonces 
+					// lista de salida vacia no hay ningun nodo
+
+					busqueda_articulo_lista1 ()
+					nuevo (qs)
+					*qs.codart := regven.codart
+					*qs.fabricante := fabricante
+					*qs.modelo := modelo
+					*qs.cantven := 1
+
+					prims := qs
+					*qs.prox:= nill
+				sino
+					// lista de salida no vacia, debo buscar al codart
+					ps := prims
+					mientras ps <> nill y *ps.codart <> regven.codart hacer 
+						ps := *ps.prox
+					fin mientras
+
+					si ps = nill entonces 
+						// el articulo no existe por ahora en la lista de salida
+						// lo cargo
+
+						busqueda_articulo_lista1 ()
+						nuevo (qs)
+						*qs.codart := regven.codart
+						*qs.fabricante := fabricante
+						*qs.modelo := modelo
+						*qs.cantven := 1
+
+						carga_ordenada_listasal ()
+					sino
+						// el articulo existe en la lista, actualizo la cantvend
+						*ps.cantvend := *ps.cantvend + 1
+					fin si
+				fin si
+
+				leer (archven,regven)
+			fin mientras
+
+			esc ("TOTAL DE PLATA GENERADA:", totalplata)
+
+			cerrar (arch)
+		fin si
+	fin proceso
+fin accion

@@ -1,0 +1,108 @@
+Accion opiniones (prim: puntero a nodoop, primcirc: puntero a nodocirc ) es 
+	ambiente
+	...
+	nodoop = registro
+		iduser
+		fecha
+		calif
+		servicio_calif
+		prox : puntero a nodoop
+	fin registro
+
+	nodosal = registro
+		...
+	fin registro	
+
+	nodocirc = registro
+		coddesc
+		porcentdesc
+		prox : puntero a nodocirc
+	fin registro
+
+	procedimiento cambio_usuario () es 
+
+		reguser.iduser := resgusuer 
+		leer (archuser, reguser)
+		si existe entonces 
+			categoria := reguser.cat
+			apynom := reguser.apynom
+			correo:= reguser.correo
+		sino
+			categoria := " "
+		fin si
+
+		si bonificacion (categoria, servicio) entonces 
+			// es verdadero, ivo se merece estar en la lista de salida pq le doy el descuento
+			nuevo (qs)
+			*qs.iduser := resgusuer 
+			*qs.apynom := apynom
+			*qs.correo := correo
+			*qs.cantop := opiniones
+			*qs.prom := suma_calif / opiniones
+			*qs.desc := *pcirc.porcentaje_desc
+
+			cargar_ordenado_listadoble ()
+
+			*pcirc := *pcirc.prox // moverme en la lista circular al proximo descuento
+		fin si
+
+		opiniones := 0
+		suma_calif := 0 
+		fecha_vieja.dd := 4
+		fecha_vieja.mm := 11
+		fecha_vieja.aa := 2026
+		resguser := *p.iduser
+	fin procedimiento
+
+
+
+	proceso
+		si prim = nill entonces 
+			esc ("lista de opiniones vacia, no puedo hacer nada")
+		sino
+			abrir e/ (archuser)
+			p := prim
+			pcirc := primcirc
+			resguser := *p.iduser
+			opiniones := 0
+			suma_calif := 0 
+			fecha_vieja.dd := 4
+			fecha_vieja.mm := 11
+			fecha_vieja.aa := 2026
+			mientras p <> nill hacer 
+
+				si resguser <> *p.iduser entonces 
+					cambio_usuario ()
+				fin si
+
+				suma_calif := suma_calif + *p.calif
+				opiniones:= opiniones + 1
+				si *p.fechaop < fecha_vieja entonces 
+					fecha_vieja := *p.fechaop
+					servicio := *p.codserv
+				fin si
+
+				p := *p.prox
+			fin mientras
+
+			// lista cargada
+			esc ("TOP 10 DE USUARIOS CON MAYOR PROMEDIO DE CALIF:")
+			ps := prims
+			para i := 1 a 10 hacer 
+				esc ("puesto numero:", i)
+				esc ("idusuario :", *ps.iduser, "nombre:", *ps.apynom "correo:", *ps.correo)
+				ps := *ps.prox
+			fin para
+
+			esc ("TOP 10 DE USUARIOS CON MENOR PROMEDIO DE CALIF:")
+			ps := ults
+			para i := 1 a 10 hacer 
+				esc ("puesto numero:", i)
+				esc ("idusuario :", *ps.iduser, "nombre:", *ps.apynom "correo:", *ps.correo)
+				ps := *ps.ant
+			fin para
+		fin si
+	fin proceso
+fin accion
+
+

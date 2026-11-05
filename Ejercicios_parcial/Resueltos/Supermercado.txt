@@ -1,0 +1,120 @@
+Accion supermercado (primr: puntero a nodor) es 
+	ambiente
+
+	nodor = registro
+		chances
+		prox : puntero a nodor
+	fin registro
+	pr: puntero a nodor
+
+	nodo = registo
+		apynom
+		chancestot
+		prox,ant : puntero a nodo
+	fin registro
+	prim,ult,p,q : puntero a nodo
+
+	compras = registro
+		fechacomp
+		dnicli
+		cantart
+		importetot
+	fin registro
+	archcompras: archivo de compras ordenado por fechacomp
+	regcompras: compras
+
+	clientes = registro
+		dnicli
+		apynom
+		fecha_ad
+		categoria
+	fin registro
+	archcli: archivo de clientes indexado por dnicli
+	regcli : clientes
+
+	procedimiento tirar_ruleta () es 
+		n := tirar ()
+		
+		para i := 1 a n hacer 	
+			pr := *pr.prox
+		fin para
+		chances_ruleta := *pr.chances
+	fin procedimiento
+
+	procedimiento carga_ordenada_listadoble () es 
+		...
+	fin procedimiento
+	
+	proceso
+
+		abrir e/ (archcompras)
+		leer (archcompras, regcompras)
+		abrir e/ (archcli)
+
+		prim := nill
+		ult := nill
+
+		pr := primr // supongo que existe la ruleta		
+		mientras nofda (archcompras) hacer
+			regcli.dnicli := regcompras.dnicli
+			leer (archcli, regcli)
+			si existe entonces 
+				// el cliente que hizo la compra es ocio del programa
+
+				si prim = nill entonces 
+					// lista doble vacia
+					nuevo (q)
+					*q.apynom := regcli.apynom
+					*q.chancestot := 5
+					*q.chacnestot := *q.chacnestot + (regcompra.importe DIV 100 )
+
+					si regcli.categoria = "Black" entonces 
+						tirar_ruleta ()
+						*q.chancestot := *q.chancestot + chances_ruleta
+					fin si
+
+					prim := q
+					*q.prox := nill
+					*q.ant := nill
+					ult := q
+				sino
+					// lista de salida no vacia, el cliente ya puede existir entonces lo busco
+					p := prim
+					mientras p <> nill y *p.apynom <> regcli.apynom hacer 
+						p := *p.prox
+					fin mientras
+
+					si p = nill entonces 
+						// el cliente no existe en la lista de salida, lo creo
+						nuevo (q)
+						*q.apynom := regcli.apynom
+						*q.chancestot := 5
+						*q.chacnestot := *q.chacnestot + (regcompra.importe DIV 100 )
+
+						si regcli.categoria =  "Black" entonces 
+							tirar_ruleta ()
+							*q.chancestot := *q.chancestot + chances_ruleta
+						fin si
+
+						carga_ordenada_listadoble ()
+					sino
+						// *p.apynom = regcli.apynom
+						// el cliente ya existe en la lista
+						*p.chacnestot := *p.chacnestot + (regcompra.importe DIV 100 )
+						si regcli.categoria =  "Black" entonces 
+							tirar_ruleta ()
+
+							*p.chancestot := *p.chancestot + chances_ruleta
+						finsi
+
+
+					fin si 
+				fin si
+			fin si
+
+			leer (archcompras, regcompras)
+		fin mientras
+		cerrar (archcli)
+		cerrar (archcompras)
+	fin proceso
+fin accion

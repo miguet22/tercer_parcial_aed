@@ -1,0 +1,94 @@
+Accion Taylor (prim, ult : puntero a nodo) es
+	ambiente
+
+	nodo = registro
+		fecharec
+		cantasit
+		cod
+		dni
+		prox, ant: puntero a nodo
+	fin registro
+	p, aux, auxrec : puntero a nodo
+
+	nodosal = registro
+		cod
+		dni
+		prox : puntero a nodosal
+	fin registro
+	prims, ps, qs, ants : puntero a nodosal
+
+
+	proceso
+		si prim = nill entonces 
+			esc ("error, lista de entrada vacia no puedo hacer nada")
+		sino
+			p := prim
+
+			prims := nill	
+
+		
+			esc ("fechas disponibles 8/11 - 9/11 - 10/11")
+			esc ("INGRESE UN DIA PARA LA CUAL QUIERE SABER CUANTOS ESPECTADORES INGRESARON")
+			leer (diausu)
+			contusu := 0
+			mientras p <> nill hacer 
+				eliminacion := "no"
+				si *p.fecharec <> " " entonces 
+					// estas parado en el nodofecha
+					auxrec := p
+				sino
+					// estas parado en el nodo de una chica que va al recital
+
+					si SwiftieHabilitada (*p.cod, *p.dni) entonces 
+						// la chica esta habilitada para ingresar al concierto
+
+						// debo eliminarla y actualizar el campo cant del nodo fecha
+
+						*auxrec.cantasist := *auxrec.cantasist + 1
+
+						si *auxrec.fecharec.dd = diausu entonces 
+							contusu := contusu + 1
+						fin si 
+						// elimino
+						aux := p
+						p := *p.prox // ya lo avanzo a otra chica (Juana)
+
+						eliminacion := "si"
+						si aux = prim entonces 
+							// eliminar el prim
+							*(*aux.prox).ant := nill
+							prim := *aux.prox
+						sino
+							si aux = ult entonces
+								// eliminar el ult 
+								*(*aux.ant).prox := nill
+								ult := *aux.ant
+							sino
+								// eliminar uno del medio
+								*(*aux.ant).prox := *aux.prox
+								*(*aux.prox).ant := *aux.ant
+							fin si
+						fin si
+
+						disponer (aux)
+					sino
+						// la chica no esta habilitada
+						nuevo (qs)
+						*qs.nrofila := DesencriptarLugarEnLaFila (*p.cod, *p.dni)
+						*qs.dni := *p.dni
+
+						cargar_listasimple ()
+					fin si
+				fin si
+				si eliminacion = "no" entonces 
+					p := *p.prox
+				fin si
+				
+			fin mientras
+			
+		fin si
+	fin proceso
+fin accion
+
+
+
